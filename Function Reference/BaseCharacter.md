@@ -190,12 +190,13 @@ Returns the chat color for this character, defaulting to one according to the va
 
 Return value can be a hex color code (eg. `#FFFFFF`, `#f776ff`), or a named color (see [Godot's Color constants](https://docs.godotengine.org/en/3.6/classes/class_color.html#constants)).
 
-Default gender colors are the following:
-- Other: `#77D86C`
-- Androgynous: `#BA82FF`
-- Female: `#FF837A`
-- Male: `#5696EA`
-- Invalid: `#FF0000`
+>[!NOTE]
+>Default gender colors are the following:
+>- Other: `#77D86C`
+>- Androgynous: `#BA82FF`
+>- Female: `#FF837A`
+>- Male: `#5696EA`
+>- Invalid: `#FF0000`
 
 ### formatSay (String)
 (text : String)
