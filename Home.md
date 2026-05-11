@@ -48,7 +48,7 @@ That should be it. Launch Godot, press import and point it to the `project.godot
 - S\*x Activity
 - [New floors](New-floors)
 - [New rooms in existing floor without overwriting](Room-to-existing-floor)
-- [Animations](Animations)
+- [Animations](AnimationStages)
 
 Eventually each topic will have a dedicated tutorial
 
