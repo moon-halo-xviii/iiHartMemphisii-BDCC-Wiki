@@ -123,28 +123,32 @@ if(animID == "tease"):
 <div align="center">
    <sup>Each doll has their own animation to do in a stage</sup>
 </div>
-- Animation Trees and Animation Player nodes are explained below
+
+Animation Trees and Animation Player nodes are explained below
 
 The avaliable arguments in an existing stage are obviously limited to what the .gd file calls for. You can quite obviously add your own arguments and functions. Self problem-solving and improvision is key, this is just the run-down on Rahi's stages.
 
 ## **Inside of a stage.tscn file**
 
-.TSCN files hold the node structure for a scene, however there are only 3 node types you need to worry about:
+.tscn files hold the node structure for a scene, however there are only 3 node types you need to worry about:
 
 #### [AnimationPlayer](https://docs.godotengine.org/en/stable/classes/class_animationplayer.html)
-- Holds the references to .tres files for animations
 - Child to DollSkeleton Spatial nodes
+- Holds the references to .tres files for animations
 
 *Useful Properties*
 
 ***Speed/playback_speed (Value)***
 
 #### [AnimationTree](https://docs.godotengine.org/en/stable/classes/class_animationtree.html#animationtree)
-- Creates transitions from animation to animation using animations in the AnimationPlayer
+- Child to Base Scene node
+- Creates transitions from animation to animation
+- Blends animations together
+- Outputs into a single animation for the armature
 - Stored as a .tres file ([DollSoloAnimationTree.tres](https://github.com/Alexofp/BDCC/blob/main/Player/StageScene3D/Scenes/DollSoloAnimationTree.tres))
-- Example: `Standing-loop` -> `Defeat` -> `Kneeling-loop`
 
 #### [Spatial](https://docs.godotengine.org/en/3.6/classes/class_spatial.html)
+- Child to Base Scene node
 - The actual 3D instance that renders the doll/character
 
 **Useful Properties**
@@ -163,9 +167,11 @@ The avaliable arguments in an existing stage are obviously limited to what the .
 These 2 files are essential to animations:
 
 **DollSoloAndCuffsTree.tres**
+- Tree Root for Animation Tree node
 - Blends 2 animations together. This specifically is used to overwrite arm/leg animations when a character is cuffed, putting their hands behind their back or feet together.
 
 **DollSoloAnimationTree.tres**
+- StateMachine node for Tree Root
 - Essentially a flow chart for animations. Used to advance from 1 animation to another in succession.
 - Example: You call `stateMachineTravel(doll, state_machine, Walk-loop)`, the Animation Tree will run `Standing-loop` -> `StandingToWalking` -> `Walk-loop`
 
@@ -190,12 +196,10 @@ It's recommended to keep folder structure similar to how the base game does. Onl
 
 **Folders to create:**
 - `res://Modules/YourModule/Player`
-- `res://Modules/YourModule/Player/Player3D`
-- `res://Modules/YourModule/Player/StageScene3D`
+- `res://Modules/YourModule/Player/Player3D` (Stores the Doll.glb related files)
+- `res://Modules/YourModule/Player/StageScene3D` (Stores the Stage related files)
 
 *All the needed files will reside in `res://Modules/YourModule/Player`*
-- `res://Modules/YourModule/Player/Player3D` Stores the Doll.glb related files.
-- `res://Modules/YourModule/Player/StageScene3D` Stores the Stage related files.
 
 ## **Blender**
 
@@ -243,6 +247,7 @@ Launch GODOT engine and open the BDCC project file
 **Re-Importing Doll.glb/Obtaining animation.tres files**
 - Set the Animation FPS property to 24. The default is 15.
 - Leave all other settings as default (unless you know what you're doing) and then re-import.
+- Don't forget to add the .import files to your mod .import folder
 
 *Now you need to obtain your animation.tres files for future use*
 - Make a copy of your Doll.glb and put it in temporary folder you can easily delete (Example: `res://Modules/YourModule/Player/Player3D/TresDump`)
@@ -329,11 +334,13 @@ func playAnimation(animID, _args = {}):
 
 - Create an Instance Child Scene node using (YourName)Doll3D.tscn (`res://Modules/YourModule/Player/Player3D`)
 - Create an AnimationTree node under the base node
+- Transform/Move the 3D model to where you want it
 
 ![GodotNodes](images/AnimationStages/godot2.png)
 
 #### Creating an [AnimationTree](https://docs.godotengine.org/en/stable/classes/class_animationtree.html#class-animationtree)
 
+- Create an AnimationTree child node
 - Load DollSoloAndCuffsTree.tres (`res://Player/StageScene3D/Scenes`) as the Tree Root property in the Inspector
 - Make the Tree Root unique
 - (Only if you wish to completely make your own node and know how) Delete the StateMachine node
@@ -345,10 +352,10 @@ func playAnimation(animID, _args = {}):
 
 ![TreeNodes](images/AnimationStages/treenodes.png)
 
-If you deleted the StateMachine node:
+**If you deleted the StateMachine node:**
 - Create a new StateMachine node
 
-For all:
+**For all:**
 - Open the StateMachine (AnimationNodeStateMachine) editor
 - Create your [StateMachine Animation Tree](https://docs.godotengine.org/en/stable/tutorials/animation/animation_tree.html#statemachine)
 
@@ -356,18 +363,18 @@ For all:
 
 *All animations will start from your center animation.
 
-To add animation nodes to the tree:
+**To add animation nodes to the tree:**
 - Create an AnimationPlayer Child Node
 - Assign the AnimationTree node's Anim Player property to the new AnimationPlayer
 - Load all your created animation.tres files into the AnimationPlayer (Created when you imported Doll.glb into a temporary folder)
 
 ![AniLoad](images/AnimationStages/aniload.png)
 
-If starting from scratch:
+**If starting from scratch:**
 - Create a start animation
 - Branch off/continue from there
 
-If adding onto the existing tree:
+**If adding onto the existing tree:**
 - Add your animation node connections starting from Standing-loop
 - Use existing nodes as examples for properties for your new animation nodes (`Switch Mode`, `Auto Advance`, `Xfade Time`, `Priority`)
 
