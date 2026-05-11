@@ -2,7 +2,7 @@ Made as of Game Version `0.2.5`
 
 There are 2 sections to this tutorial, **Learning** and **In Practice**. If you wish to go straight to making animations, skip to **In Practice**.
 
-It's recommend to gain a bit of knowledge on the topic first so you can grasp how the game functions. Without doing so it may be difficult to expand or incorporate more advanced methods not specifically covered in the steps.
+It's recommend to gain a bit of knowledge on the topic first so you can grasp how the game functions. Without doing so it may be difficult to expand or incorporate more advanced methods not specifically covered in the steps. A test mod is provided at the bottom of the page.
 
 Be aware, this tutorial is not for developing beginners and can be difficult to follow if you don't understand a few GODOT and Blender terms or interface locations.
 
@@ -78,10 +78,11 @@ The _args{} Stages tell the game:
 
 ## **Inside of a stage.gd file**
 
-All non-solo Stages have a "pc" and "npc". 
+All of Rahi's non-solo Stages have a "pc" and "npc". 
 PC will be the dominant in a sex scene or the main focus in a non sex scene. That makes NPC the submissive in a sex scene or the secondary focus. PC is often the player's character but can also be used to make a different character the main one, depending on the scene or even the animation.
 
 Most of Rahi's StageScene have 2-3 dolls: 
+
 ```gdscript
 onready var animationTree = $AnimationTree
 onready var animationTree2 = $AnimationTree2
@@ -89,9 +90,25 @@ onready var animationTree3 = $AnimationTree3
 onready var doll = $Doll3D
 onready var doll2 = $Doll3D2
 onready var doll3 = $Doll3D3
+
+func playAnimation(animID, _args = {}):
+	var fullAnimID = animID
+	if(animID is Array):
+		animID = animID[0]
+	
+	print("Playing duo: "+str(animID))
+	var firstDoll = "pc"
+	if(_args.has("pc")):
+		firstDoll = _args["pc"]
+	doll.prepareCharacter(firstDoll)
+	var secondDoll = "pc"
+	if(_args.has("npc")):
+		secondDoll = _args["npc"]
+	doll2.prepareCharacter(secondDoll)
+( . . . )
 ```
 
-If you wish to add more dolls, you'll have to add more Doll3D and AnimationTree nodes in your stage's .tscn file.
+If you wish to add more dolls, you'll have to add more Doll3D and AnimationTree nodes in your stage.tscn file.
 
 There are a few important functions for Rahi's stages:
 
@@ -104,7 +121,7 @@ There are a few important functions for Rahi's stages:
 - All self explanatory when looking at the function yourself. Sets what is shown in the stage and passes the AnimID to either `state_machine.travel()` or `stateMachineTravel()`
 
 #### `func stateMachineTravel(thedoll, state_machine, animID):`
-- Not in all stage.gd files (Inside BaseStageScene3D.gd).
+- Not in all stage.gd files (Inside `BaseStageScene3D.gd`).
 - More parameters and arguments for settings.
 
 #### `state_machine.travel()`
@@ -123,8 +140,6 @@ if(animID == "tease"):
 <div align="center">
    <sup>Each doll has their own animation to do in a stage</sup>
 </div>
-
-Animation Trees and Animation Player nodes are explained below
 
 The avaliable arguments in an existing stage are obviously limited to what the .gd file calls for. You can quite obviously add your own arguments and functions. Self problem-solving and improvision is key, this is just the run-down on Rahi's stages.
 
@@ -158,7 +173,7 @@ The avaliable arguments in an existing stage are obviously limited to what the .
 - *Rotation Degrees/rotation_degrees* (X, Y, Z)
 - *Scale* (X, Y, Z)
 
-****Visible (boolean)***
+***Visible (boolean)***
 
 .TSCN files can be edited in text editors manually but it's recommended to use the GODOT engine for anyone not knowing what they're doing
 
@@ -174,6 +189,8 @@ These 2 files are essential to animations:
 - StateMachine node for Tree Root
 - Essentially a flow chart for animations. Used to advance from 1 animation to another in succession.
 - Example: You call `stateMachineTravel(doll, state_machine, Walk-loop)`, the Animation Tree will run `Standing-loop` -> `StandingToWalking` -> `Walk-loop`
+
+In this tutorial, these 2 files will be combined into a single .tres file.
 
 ![GodotTree](images/AnimationStages/godottree.png)
 <div align="center">
@@ -231,10 +248,12 @@ There are only 9 main bones you need to keyframe:
 
 Try moving bones around and see how the joints follow for yourself!
 
-**Major Note:** If you want your action/animation to be a loop, be sure to add "-loop" to the end of the name. 
-- Example: `DoggyStyle3SexFast` -> `DoggyStyle3SexFast-loop`
+> [!NOTE]
+> If you want your action/animation to be a loop, be sure to add "-loop" to the end of the name.
+> 
+> Example: `DoggyStyle3SexFast` -> `DoggyStyle3SexFast-loop`
 
-Once you've finished animating your action, stash the action to the NLA stack. Export the Doll as a .glb file and you're ready for GODOT. You can name the file anything for ease of memory. Place your exported Doll.glb file in `res://Modules/YourModule/Player/Player3D`
+Once you've finished animating your action, stash the action to the NLA stack. Export the Doll as a .glb file and you're ready for GODOT. *Be sure to select all checkboxes under the include/limit to export setting.* You can name the file anything for ease of memory. Place your exported Doll.glb file in `res://Modules/YourModule/Player/Player3D`
 
 ## **GODOT**
 
@@ -263,12 +282,14 @@ Depending on how many animations your Doll has, it may take a second. They will 
 #### DollSkeleton.tscn
 - Duplicate DollSkeleton.tcsn `res://Player/Player3D` and move it to your own Player3D folder (`res://Modules/YourModule/Player/Player3D`). Rename it (YourName)DollSkeleton.tscn
 - Open (YourName)DollSkeleton.tcsn in a text file editor and edit the 1st resource line, replacing Rahi's DollSkeleton.glb with your own.
+- Be sure to leave the 2nd resource script path as `res://Player/Player3D/DollSkeleton.gd` unless you know what you're doing.
 
 `[ext_resource path="res://Player/Player3D/DollSkeleton.glb" type="PackedScene" id=1]` -> `[ext_resource path="res://Modules/YourModule/Player/Player3D/(YourName)Doll.glb" type="PackedScene" id=1]`
 
 #### Doll3D.tscn
 - Duplicate Doll3D.tcsn `res://Player/Player3D` and move it to your own Player3D folder (`res://Modules/YourModule/Player/Player3D`). Rename it (YourName)Doll3D.tscn
 - Open (YourName)Doll3D.tcsn in a text file editor and edit the 1st resource line, replacing Rahi's DollSkeleton.tscn with your own.
+- Leave all other resources alone unless you know what you're doing.
 
 `[ext_resource path="res://Player/Player3D/DollSkeleton.tscn" type="PackedScene" id=1]` -> `[ext_resource path="res://Modules/YourModule/Player/Player3D/(YourName)Skeleton.tscn" type="PackedScene" id=1]`
 
@@ -301,14 +322,19 @@ func playAnimation(animID, _args = {}):
 		doll.transform.origin.x = 1.5
 
 	var state_machine = animationTree["parameters/AnimationNodeStateMachine/playback"]
-	if(!stateMachineTravel(doll, state_machine, fullAnimID)):
-		Log.printerr("Action "+str(animID)+" is not found for stage "+str(id))
+# Beaware: Rahi changed the Tree Root StateMachine node name to "AnimationNodeStateMachine" BUT left it as "StateMachine" for others like below
+# var state_machine = animationTree["parameters/StateMachine/playback"]
+# Just be sure to read the error logs often the first time around
+
+	state_machine.travel(animID)
 ```
 <div align="center">
    <sup>playAnimation("YourStage", "MyAction3", {npc="nova"})</sup>
 </div>
 
-*You can rewrite your Stage.gd file from there. Just keep in mind Duo.gd will point to nodes that your stage may not use (Like $Chair or $KidlatBox)*
+- Copy `stateMachineTravel()` from
+
+*You can rewrite your Stage.gd file from there. Just keep in mind Duo.gd will point to nodes that your stage may not use (Like $Chair or $KidlatBox). Duo.gd also calls `stateMachineTravel()` from `BaseStageScene3D.gd`. It's up to you to change the functions it calls or add `stateMachineTravel()` to your new stage.gd script.*
 
 ### Stage.tcsn creation
 
@@ -354,6 +380,7 @@ func playAnimation(animID, _args = {}):
 
 **If you deleted the StateMachine node:**
 - Create a new StateMachine node
+- **Rename StateMachine to AnimationNodeStateMachine**
 
 **For all:**
 - Open the StateMachine (AnimationNodeStateMachine) editor
@@ -422,3 +449,6 @@ func _run():
 
 		saynn("[say=pc]Victory at last![/say]")
 ```
+
+Test File:
+# [LotterusTest.zip](https://github.com/iiHartMemphisii/BDCC-Wiki/blob/RealTrapping/examples/LotterusTest.zip)	
