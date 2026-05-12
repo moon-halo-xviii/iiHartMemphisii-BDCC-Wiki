@@ -192,7 +192,7 @@ These 2 files are essential to animations:
 
 In this tutorial, these 2 files will be combined into a single .tres file.
 
-![GodotTree](images/AnimationStages/godottree.png)
+![GodotTree](https://github.com/iiHartMemphisii/BDCC-Wiki/blob/RealTrapping/images/AnimationStages/godottree.png)
 <div align="center">
    <sup>Animation Tree editor in GODOT. All animations start with and are connected to Standing-loop. The animations in your stage can be centered around a different animation if you wish.</sup>
 </div>
@@ -229,7 +229,7 @@ It's recommended to keep folder structure similar to how the base game does. Onl
 - Enable Auto-Keying
 - Animate!
 
-![BlenderShowcase](images/AnimationStages/blendshow.png)
+![BlenderShowcase](https://github.com/iiHartMemphisii/BDCC-Wiki/blob/RealTrapping/images/AnimationStages/blendshow.png)
 
 ### Animation Tips
 
@@ -254,6 +254,8 @@ Try moving bones around and see how the joints follow for yourself!
 > Example: `DoggyStyle3SexFast` -> `DoggyStyle3SexFast-loop`
 
 Once you've finished animating your action, stash the action to the NLA stack. Export the Doll as a .glb file and you're ready for GODOT. *Be sure to select all checkboxes under the include/limit to export setting.* You can name the file anything for ease of memory. Place your exported Doll.glb file in `res://Modules/YourModule/Player/Player3D`
+
+![BlenderExport](https://github.com/iiHartMemphisii/BDCC-Wiki/blob/RealTrapping/images/AnimationStages/blenderexport.png)
 
 ## **GODOT**
 
@@ -344,7 +346,7 @@ func playAnimation(animID, _args = {}):
 - *(Optional)* Rename the BaseStageScene3D node to the name of your scene
 - Load (YourStage).gd as the script property for the base node
 
-![BlenderShowcase](images/AnimationStages/loadscript.png)
+![BlenderShowcase](https://github.com/iiHartMemphisii/BDCC-Wiki/blob/RealTrapping/images/AnimationStages/loadscript.png)
 
 #### Creating the platform
 
@@ -362,7 +364,7 @@ func playAnimation(animID, _args = {}):
 - Create an AnimationTree node under the base node
 - Transform/Move the 3D model to where you want it
 
-![GodotNodes](images/AnimationStages/godot2.png)
+![GodotNodes](https://github.com/iiHartMemphisii/BDCC-Wiki/blob/RealTrapping/images/AnimationStages/godot2.png)
 
 #### Creating an [AnimationTree](https://docs.godotengine.org/en/stable/classes/class_animationtree.html#class-animationtree)
 
@@ -376,7 +378,7 @@ func playAnimation(animID, _args = {}):
    <sup>Animation Nodes</sup>
 </div>
 
-![TreeNodes](images/AnimationStages/treenodes.png)
+![TreeNodes](https://github.com/iiHartMemphisii/BDCC-Wiki/blob/RealTrapping/images/AnimationStages/treenodes.png)
 
 **If you deleted the StateMachine node:**
 - Create a new StateMachine node
@@ -395,7 +397,7 @@ func playAnimation(animID, _args = {}):
 - Assign the AnimationTree node's Anim Player property to the new AnimationPlayer
 - Load all your created animation.tres files into the AnimationPlayer (Created when you imported Doll.glb into a temporary folder)
 
-![AniLoad](images/AnimationStages/aniload.png)
+![AniLoad](https://github.com/iiHartMemphisii/BDCC-Wiki/blob/RealTrapping/images/AnimationStages/aniload.png)
 
 **If starting from scratch:**
 - Create a start animation
@@ -405,14 +407,14 @@ func playAnimation(animID, _args = {}):
 - Add your animation node connections starting from Standing-loop
 - Use existing nodes as examples for properties for your new animation nodes (`Switch Mode`, `Auto Advance`, `Xfade Time`, `Priority`)
 
-![AniLoad](images/AnimationStages/xfade.png)
+![AniLoad](https://github.com/iiHartMemphisii/BDCC-Wiki/blob/RealTrapping/images/AnimationStages/xfade.png)
 
 Once you have created your StateMachine, save your Tree Root. You can now load it if you wish to add more animations, nodes, properties, etc.
 - Up to you to delete the AnimationPlayer child node to clean up
 
 **If you wish to add more than 1 character to your stage, duplicate your Doll3D and AnimationTree nodes for however many characters you wish. Keep in mind to edit (YourStage).gd accordingly.**
 
-![Triples](images/AnimationStages/triple.png)
+![Triples](https://github.com/iiHartMemphisii/BDCC-Wiki/blob/RealTrapping/images/AnimationStages/triple.png)
 
 ## **Adding your stage to the game**
 
